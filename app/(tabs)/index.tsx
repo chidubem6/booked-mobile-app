@@ -1,98 +1,122 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import "../global.css"
+import { Text, View, TextInput, TouchableOpacity, ScrollView, SafeAreaView } from "react-native";
+import { useState } from "react";
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [query, setQuery] = useState("");
+  const [activeCat, setActiveCat] = useState<string | null>(null);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  const CATEGORIES = ["Braids", "Locs", "Nails", "Barber", "Makeup"] as const;
+
+  return (
+    <SafeAreaView className="flex-1 bg-black">
+      {/* Sticky Header */}
+      <View className="bg-gray-900 px-4 pt-4 pb-3 border-b border-yellow-400/20">
+        {/* Top row: Location & Notifications */}
+        <View className="flex-row items-center justify-between mb-3">
+          {/* Location */}
+          <View className="flex-row items-center">
+            <Text className="text-yellow-400 text-base mr-1">📍</Text>
+            <Text className="ml-1 text-white font-medium">London, UK</Text>
+            <Text className="text-yellow-400 text-base ml-1">▼</Text>
+          </View>
+          
+          {/* Notifications */}
+          <TouchableOpacity className="p-2 -mr-2">
+            <Text className="text-yellow-400 text-lg">🔔</Text>
+          </TouchableOpacity>
+        </View>
+        
+        {/* Search */}
+        <View className="relative">
+          <TextInput
+            placeholder="Search Booked."
+            value={query}
+            onChangeText={setQuery}
+            className="bg-black rounded-2xl p-4 mb-3 border border-yellow-400/30 pr-12 text-white"
+            placeholderTextColor="#9CA3AF"
+          />
+          {query.trim().length > 0 && (
+            <TouchableOpacity
+              onPress={() => setQuery("")}
+              className="absolute right-4 top-4 p-1"
+            >
+              <Text className="text-gray-400 text-base">✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Category chips - hidden when searching */}
+        {!query.trim() && (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-3">
+            <View className="flex-row gap-2">
+              {CATEGORIES.map((cat) => {
+                const active = activeCat === cat;
+                return (
+                  <TouchableOpacity
+                    key={cat}
+                    onPress={() => setActiveCat(active ? null : cat)}
+                    className={`px-4 h-10 rounded-full items-center justify-center ${
+                      active ? "bg-yellow-400" : "bg-gray-800 border border-gray-600"
+                    }`}
+                  >
+                    <Text className={active ? "text-black font-medium" : "text-white"}>{cat}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </ScrollView>
+        )}
+      </View>
+
+      {/* Scrollable Content */}
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <View className="px-4">
+          {/* Featured providers section - empty when no data */}
+          {!activeCat && !query.trim() && (
+            <View className="mb-4">
+              <Text className="text-lg font-semibold mb-2 text-white">Featured near you</Text>
+              <View className="bg-gray-900 rounded-2xl border border-gray-700 p-6 items-center">
+                <Text className="text-4xl mb-3">✨</Text>
+                <Text className="text-white text-lg font-medium mb-2">
+                  No featured providers yet
+                </Text>
+                <Text className="text-gray-400 text-center text-base">
+                  Featured providers will appear here once available
+                </Text>
+              </View>
+            </View>
+          )}
+
+          {/* When a category is active, show header */}
+          {activeCat && (
+            <View className="mb-3 px-1">
+              <Text className="text-sm text-gray-400">Showing results for</Text>
+              <Text className="text-lg font-semibold text-yellow-400">{activeCat}</Text>
+            </View>
+          )}
+
+          {/* Section divider */}
+          <Text className="text-lg font-semibold mb-4 text-white">All providers</Text>
+          
+          {/* Empty state for providers */}
+          <View className="bg-gray-900 rounded-2xl border border-gray-700 p-6 items-center">
+            <Text className="text-6xl mb-4">📍</Text>
+            <Text className="text-white text-lg font-medium mb-2">
+              No providers found
+            </Text>
+            <Text className="text-gray-400 text-center text-base mb-4">
+              We're building our network of amazing beauty professionals in your area
+            </Text>
+            <TouchableOpacity className="bg-yellow-400/20 border border-yellow-400 rounded-xl py-3 px-6">
+              <Text className="text-yellow-400 font-medium">Notify Me When Available</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        
+        {/* Bottom Spacing */}
+        <View className="h-8" />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
