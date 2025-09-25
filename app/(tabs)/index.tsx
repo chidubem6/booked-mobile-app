@@ -1,5 +1,5 @@
-import "../global.css"
 import { Text, View, TextInput, TouchableOpacity, ScrollView, SafeAreaView } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
 
 export default function HomeScreen() {
@@ -16,24 +16,25 @@ export default function HomeScreen() {
         <View className="flex-row items-center justify-between mb-3">
           {/* Location */}
           <View className="flex-row items-center">
-            <Text className="text-yellow-400 text-base mr-1">📍</Text>
+            <Ionicons name="location-outline" size={18} color="#FACC15" />
             <Text className="ml-1 text-white font-medium">London, UK</Text>
-            <Text className="text-yellow-400 text-base ml-1">▼</Text>
+            <Ionicons name="chevron-down" size={16} color="#FACC15" style={{ marginLeft: 4 }} />
           </View>
           
           {/* Notifications */}
           <TouchableOpacity className="p-2 -mr-2">
-            <Text className="text-yellow-400 text-lg">🔔</Text>
+            <Ionicons name="notifications-outline" size={22} color="#FACC15" />
           </TouchableOpacity>
         </View>
         
         {/* Search */}
         <View className="relative">
+          <Ionicons name="search-outline" size={18} color="#FACC15" style={{ position: 'absolute', left: 16, top: 18, zIndex: 1 }} />
           <TextInput
             placeholder="Search Booked."
             value={query}
             onChangeText={setQuery}
-            className="bg-black rounded-2xl p-4 mb-3 border border-yellow-400/30 pr-12 text-white"
+            className="bg-black rounded-2xl p-4 pl-12 mb-3 border border-yellow-400/30 pr-12 text-white"
             placeholderTextColor="#9CA3AF"
           />
           {query.trim().length > 0 && (
@@ -41,7 +42,7 @@ export default function HomeScreen() {
               onPress={() => setQuery("")}
               className="absolute right-4 top-4 p-1"
             >
-              <Text className="text-gray-400 text-base">✕</Text>
+              <Ionicons name="close-circle" size={20} color="#9CA3AF" />
             </TouchableOpacity>
           )}
         </View>
@@ -77,7 +78,7 @@ export default function HomeScreen() {
             <View className="mb-4">
               <Text className="text-lg font-semibold mb-2 text-white">Featured near you</Text>
               <View className="bg-gray-900 rounded-2xl border border-gray-700 p-6 items-center">
-                <Text className="text-4xl mb-3">✨</Text>
+                <Ionicons name="sparkles-outline" size={32} color="#FACC15" style={{ marginBottom: 12 }} />
                 <Text className="text-white text-lg font-medium mb-2">
                   No featured providers yet
                 </Text>
@@ -101,7 +102,7 @@ export default function HomeScreen() {
           
           {/* Empty state for providers */}
           <View className="bg-gray-900 rounded-2xl border border-gray-700 p-6 items-center">
-            <Text className="text-6xl mb-4">📍</Text>
+            <Ionicons name="location-outline" size={48} color="#FACC15" style={{ marginBottom: 16 }} />
             <Text className="text-white text-lg font-medium mb-2">
               No providers found
             </Text>

@@ -7,12 +7,12 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#000000',
-        tabBarInactiveTintColor: '#666666',
+        tabBarActiveTintColor: '#FACC15',
+        tabBarInactiveTintColor: '#9CA3AF',
         tabBarStyle: {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#0B0B0B',
           borderTopWidth: 1,
-          borderTopColor: '#e5e5e5',
+          borderTopColor: '#1F2937',
           height: 80,
           paddingBottom: 8,
           paddingTop: 8,
@@ -30,7 +30,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="bookings"
+        name="managebookings"
         options={{
           title: 'Bookings',
           headerShown: false,
@@ -40,7 +40,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="userprofile"
         options={{
           title: 'Profile',
           headerShown: false,
